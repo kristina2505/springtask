@@ -18,7 +18,7 @@ public class Polje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "formular_id", nullable = false)
     private Formular formular;
 
@@ -29,7 +29,7 @@ public class Polje {
     private int prikazniRedosled;
 
     @Enumerated(EnumType.STRING)
-    private TipPolja tip;
+    private TipPolja tipPolja;
 
     private LocalDateTime vremeKreiranja;
     private LocalDateTime vremePoslednjeIzmene;

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class PoljePopunjeno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "formular_popunjen_id", nullable = false)
@@ -24,6 +24,9 @@ public class PoljePopunjeno {
     @ManyToOne
     @JoinColumn(name = "polje_id")
     private Polje polje;
+
+    private String vrednostTekst;
+    private double vrednostBroj;
 
     private LocalDateTime vremeKreiranja;
     private LocalDateTime vremePoslednjeIzmene;
