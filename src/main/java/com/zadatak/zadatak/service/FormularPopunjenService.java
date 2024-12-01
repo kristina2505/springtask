@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -102,5 +103,12 @@ public class FormularPopunjenService {
         formularPopunjenRepository.deleteById(formularPopunjenDTO.getId());
         return true;
     }
+
+    public List<FormularPopunjen> countPopunjeniFormulari(LocalDateTime startOfYesterday, LocalDateTime endOfYesterday) {
+        List<FormularPopunjen> popunjeniFormulari = new ArrayList<>();
+        popunjeniFormulari = formularPopunjenRepository.findByVremeKreiranjaBetween(startOfYesterday, endOfYesterday);
+        return popunjeniFormulari;
+    }
+
 
 }
