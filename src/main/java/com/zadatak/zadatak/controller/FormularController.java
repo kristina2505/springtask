@@ -4,6 +4,7 @@ import com.zadatak.zadatak.dto.FormularDTO;
 import com.zadatak.zadatak.dto.PoljeDTO;
 import com.zadatak.zadatak.service.FormularService;
 import com.zadatak.zadatak.service.PoljeService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class FormularController {
     }
 
     @PostMapping
-    public ResponseEntity<FormularDTO> saveFormular(@RequestBody FormularDTO formularDTO) {
+    public ResponseEntity<FormularDTO> saveFormular(@Valid @RequestBody FormularDTO formularDTO) {
         try{
             return ResponseEntity.ok(formularService.createFormular(formularDTO).orElseThrow());
         } catch (Exception e) {
@@ -44,13 +45,11 @@ public class FormularController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FormularDTO> updateFormular(@PathVariable int id, @RequestBody FormularDTO formularDTO) {
+    public ResponseEntity<FormularDTO> updateFormular(@PathVariable int id, @Valid @RequestBody FormularDTO formularDTO) {
         try {
             formularDTO.setId(id);
             return ResponseEntity.ok(formularService.updateFormular(formularDTO).orElseThrow());
         }catch (Exception e) {
-            e.getMessage();
-            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
@@ -70,7 +69,7 @@ public class FormularController {
     }
 
     @PostMapping("/polje")
-    public ResponseEntity<PoljeDTO> createPolje(@RequestBody PoljeDTO poljeDTO) {
+    public ResponseEntity<PoljeDTO> createPolje(@Valid @RequestBody PoljeDTO poljeDTO) {
         try {
             Optional<FormularDTO> formularDTOOptional = formularService.getFormularById(poljeDTO.getFormularId());
             if (formularDTOOptional.isPresent()) {
@@ -82,7 +81,7 @@ public class FormularController {
     }
 
     @PutMapping("/polje/{id}")
-    public ResponseEntity<PoljeDTO> updatePolje(@PathVariable int id, @RequestBody PoljeDTO poljeDTO) {
+    public ResponseEntity<PoljeDTO> updatePolje(@PathVariable int id,@Valid @RequestBody PoljeDTO poljeDTO) {
         try {
             poljeDTO.setId(id);
             return ResponseEntity.ok(poljeService.updatePolje(poljeDTO).orElseThrow());

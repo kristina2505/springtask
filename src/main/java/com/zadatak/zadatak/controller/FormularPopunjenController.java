@@ -4,6 +4,7 @@ import com.zadatak.zadatak.dto.FormularPopunjenDTO;
 import com.zadatak.zadatak.dto.PoljePopunjenoDTO;
 import com.zadatak.zadatak.service.FormularPopunjenService;
 import com.zadatak.zadatak.service.PoljePopunjenoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class FormularPopunjenController {
     }
 
     @PostMapping
-    public ResponseEntity<FormularPopunjenDTO> createFormularPopunjen(@RequestBody FormularPopunjenDTO formularPopunjenDTO) throws Exception {
+    public ResponseEntity<FormularPopunjenDTO> createFormularPopunjen(@Valid @RequestBody FormularPopunjenDTO formularPopunjenDTO) throws Exception {
         try{
             return ResponseEntity.ok(formularPopunjenService.save(formularPopunjenDTO).orElseThrow());
         } catch (Exception e) {
@@ -44,7 +45,7 @@ public class FormularPopunjenController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FormularPopunjenDTO> updateFormularPopunjen(@PathVariable int id, @RequestBody FormularPopunjenDTO formularPopunjenDTO) {
+    public ResponseEntity<FormularPopunjenDTO> updateFormularPopunjen(@PathVariable int id, @Valid @RequestBody FormularPopunjenDTO formularPopunjenDTO) {
         try {
             formularPopunjenDTO.setId(id);
             return ResponseEntity.ok(formularPopunjenService.update(formularPopunjenDTO).orElseThrow());
@@ -67,7 +68,7 @@ public class FormularPopunjenController {
     }
 
     @PostMapping("/polje-popunjeno")
-    public ResponseEntity<PoljePopunjenoDTO> createPoljePopunjeno(@RequestBody PoljePopunjenoDTO poljePopunjenoDTO) throws Exception {
+    public ResponseEntity<PoljePopunjenoDTO> createPoljePopunjeno(@Valid @RequestBody PoljePopunjenoDTO poljePopunjenoDTO) throws Exception {
         try {
             Optional<FormularPopunjenDTO> formularPopunjenDTO = formularPopunjenService.getById(poljePopunjenoDTO.getFormularPopunjenId());
             if (formularPopunjenDTO.isPresent()) {
@@ -79,7 +80,7 @@ public class FormularPopunjenController {
     }
 
     @PutMapping("/polje-popunjeno/{id}")
-    public ResponseEntity<PoljePopunjenoDTO> updatePoljePopunjeno(@PathVariable int id, @RequestBody PoljePopunjenoDTO poljePopunjenoDTO) throws Exception {
+    public ResponseEntity<PoljePopunjenoDTO> updatePoljePopunjeno( @PathVariable int id, @Valid @RequestBody PoljePopunjenoDTO poljePopunjenoDTO) throws Exception {
         try {
             poljePopunjenoDTO.setId(id);
             return ResponseEntity.ok(poljePopunjenoService.updatePoljePopunjeno(poljePopunjenoDTO).orElseThrow());
