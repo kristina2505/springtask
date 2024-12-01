@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class FormularPopunjen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "formular_id", nullable = false)
