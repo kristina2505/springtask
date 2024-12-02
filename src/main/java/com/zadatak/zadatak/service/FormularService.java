@@ -7,6 +7,9 @@ import com.zadatak.zadatak.model.Formular;
 import com.zadatak.zadatak.repository.FormularRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,17 +26,14 @@ public class FormularService {
     private final PoljeService poljeService;
     private final FormularMapper formularMapper;
 
-    public List<FormularDTO> getAll() {
-        List<Formular> formulars = formularRepository.findAll();
+    public Page<FormularDTO> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Formular> formulars = formularRepository.findAll(pageable);
 
-        List<FormularDTO> formularDTOs = new ArrayList<>();
-        for (Formular formular : formulars) {
+        return formulars.map(formular -> {
             List<PoljeDTO> polja = poljeService.getByFormularId(formular.getId());
-            FormularDTO formularDTO = formularMapper.toFormularDTO(formular, polja);
-            formularDTOs.add(formularDTO);
-        }
-
-        return formularDTOs;
+            return formularMapper.toFormularDTO(formular, polja);
+        });
     }
 
     public Optional<FormularDTO> getFormularById(int id){

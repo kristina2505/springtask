@@ -6,6 +6,7 @@ import com.zadatak.zadatak.service.FormularService;
 import com.zadatak.zadatak.service.PoljeService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,24 +21,24 @@ public class FormularController {
     private final PoljeService poljeService;
 
     @GetMapping
-    public ResponseEntity<List<FormularDTO>> getall() {
-        return ResponseEntity.ok(formularService.getAll());
+    public ResponseEntity<Page<FormularDTO>> getall(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(formularService.getAll(page, size));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<FormularDTO> getFormularById(@PathVariable int id) {
-        try{
+        try {
             return formularService.getFormularById(id)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
     public ResponseEntity<FormularDTO> saveFormular(@Valid @RequestBody FormularDTO formularDTO) {
-        try{
+        try {
             return ResponseEntity.ok(formularService.createFormular(formularDTO).orElseThrow());
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -49,7 +50,7 @@ public class FormularController {
         try {
             formularDTO.setId(id);
             return ResponseEntity.ok(formularService.updateFormular(formularDTO).orElseThrow());
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -74,14 +75,15 @@ public class FormularController {
             Optional<FormularDTO> formularDTOOptional = formularService.getFormularById(poljeDTO.getFormularId());
             if (formularDTOOptional.isPresent()) {
                 return ResponseEntity.ok(poljeService.createPolje(poljeDTO, formularDTOOptional.get()).orElseThrow());
-            }return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @PutMapping("/polje/{id}")
-    public ResponseEntity<PoljeDTO> updatePolje(@PathVariable int id,@Valid @RequestBody PoljeDTO poljeDTO) {
+    public ResponseEntity<PoljeDTO> updatePolje(@PathVariable int id, @Valid @RequestBody PoljeDTO poljeDTO) {
         try {
             poljeDTO.setId(id);
             return ResponseEntity.ok(poljeService.updatePolje(poljeDTO).orElseThrow());
