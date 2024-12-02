@@ -16,7 +16,7 @@ public class KorisnikDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+korisnik.getRole().name()));
     }
 
     @Override

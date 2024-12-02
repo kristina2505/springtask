@@ -22,6 +22,10 @@ public class Korisnik {
     @Column(nullable=false)
     private String lozinka;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false)
+    private Role role;
+
     private LocalDateTime vremeKreiranja;
     private LocalDateTime vremePoslednjeIzmene;
 
