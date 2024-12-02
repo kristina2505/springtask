@@ -1,7 +1,6 @@
 package com.zadatak.zadatak.dto;
 
 import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.Digits;
 import lombok.Data;
 import jakarta.validation.constraints.Size;
 

@@ -1,5 +1,6 @@
 package com.zadatak.zadatak.model;
 
+import com.zadatak.zadatak.service.KorisnikContextService;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,14 +25,32 @@ public class FormularPopunjen {
     private LocalDateTime vremeKreiranja;
     private LocalDateTime vremePoslednjeIzmene;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_korisnik_kreirao", nullable = false)
+    private Korisnik korisnikKreirao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_korisnik_poslednji_azurirao", nullable = true)
+    private Korisnik korisnikPoslednjiAzurirao;
+
+    @Transient
+    private static KorisnikContextService korisnikContextService;
+
+    public static void setKorisnikContextService(KorisnikContextService service) {
+        korisnikContextService = service;
+    }
+
     @PrePersist
     protected void onCreate() {
         this.vremeKreiranja = LocalDateTime.now();
         this.vremePoslednjeIzmene = LocalDateTime.now();
+        this.korisnikKreirao = korisnikContextService.getCurrentUser();
+        this.korisnikPoslednjiAzurirao = korisnikContextService.getCurrentUser();
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.vremePoslednjeIzmene = LocalDateTime.now();
+        this.korisnikPoslednjiAzurirao = korisnikContextService.getCurrentUser();
     }
 }
