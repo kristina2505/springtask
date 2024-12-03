@@ -4,6 +4,7 @@ import com.zadatak.zadatak.dto.FormularDTO;
 import com.zadatak.zadatak.dto.PoljeDTO;
 import com.zadatak.zadatak.mapper.FormularMapper;
 import com.zadatak.zadatak.model.Formular;
+import com.zadatak.zadatak.model.Polje;
 import com.zadatak.zadatak.repository.FormularRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -49,16 +50,16 @@ public class FormularService {
     }
 
     public Optional<FormularDTO> createFormular(FormularDTO formularDTO) throws Exception {
+
         Formular formular = formularMapper.toFormular(formularDTO);
+        if (formular.getPolja() != null) {
+            for (Polje polje : formular.getPolja()) {
+                polje.setFormular(formular);
+            }
+        }
         Formular savedFormular = formularRepository.save(formular);
 
-        List<PoljeDTO> poljaSaved = new ArrayList<>();
-        for (PoljeDTO poljeDTO : formularDTO.getPolja()) {
-            Optional<PoljeDTO> poljeSaved = poljeService.createPolje(poljeDTO, formularMapper.toFormularDTO(savedFormular));
-            poljeSaved.ifPresent(poljaSaved::add);
-        }
-
-        return Optional.of(formularMapper.toFormularDTO(savedFormular, poljaSaved));
+        return Optional.of(formularMapper.toFormularDTO(savedFormular));
     }
 
     public Optional<FormularDTO> updateFormular(FormularDTO formularDTO) throws Exception {
@@ -69,26 +70,19 @@ public class FormularService {
 
         Formular formular = formularOptional.get();
         formularMapper.updateFormularFromDTO(formularDTO, formular);
-        Formular updatedFormular = formularRepository.save(formular);
-
         List<PoljeDTO> poljaUpdated = new ArrayList<>();
         for (PoljeDTO poljeDTO : formularDTO.getPolja()) {
             Optional<PoljeDTO> poljeUpdated = poljeService.updatePolje(poljeDTO);
             poljeUpdated.ifPresent(poljaUpdated::add);
         }
-
-        return Optional.of(formularMapper.toFormularDTO(updatedFormular, poljaUpdated));
+        Formular updatedFormular = formularRepository.save(formular);
+        return Optional.of(formularMapper.toFormularDTO(updatedFormular,poljaUpdated));
     }
 
     public boolean deleteFormular(FormularDTO formularDTO) throws Exception {
         Optional<Formular> formularOptional = formularRepository.findById(formularDTO.getId());
         if (formularOptional.isEmpty()) {
             throw new EntityNotFoundException("Nije pronadjen formular za uneti ID");
-        }
-
-        List<PoljeDTO> poljaZaBrisanje = poljeService.getByFormularId(formularDTO.getId());
-        for (PoljeDTO poljeDTO : poljaZaBrisanje) {
-            poljeService.deletePolje(poljeDTO);
         }
 
         formularRepository.deleteById(formularDTO.getId());

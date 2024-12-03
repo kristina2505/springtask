@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Table(name = "Formular")
@@ -24,6 +25,9 @@ public class Formular {
 
     private LocalDateTime vremeKreiranja;
     private LocalDateTime vremePoslednjeIzmene;
+
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Polje> polja;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_korisnik_kreirao", nullable = false)

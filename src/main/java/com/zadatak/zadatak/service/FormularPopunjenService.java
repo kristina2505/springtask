@@ -7,6 +7,7 @@ import com.zadatak.zadatak.mapper.FormularMapper;
 import com.zadatak.zadatak.mapper.FormularPopunjenMapper;
 import com.zadatak.zadatak.model.Formular;
 import com.zadatak.zadatak.model.FormularPopunjen;
+import com.zadatak.zadatak.model.PoljePopunjeno;
 import com.zadatak.zadatak.repository.FormularPopunjenRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -62,14 +63,13 @@ public class FormularPopunjenService {
         Formular formular = formularMapper.toFormular(formularDTO.get());
         FormularPopunjen formularPopunjen = formularPopunjenMapper.toFormularPopunjen(formularPopunjenDTO);
         formularPopunjen.setFormular(formular);
-        FormularPopunjen formularPopunjenSaved = formularPopunjenRepository.save(formularPopunjen);
-        List<PoljePopunjenoDTO> poljaPopunjenaSaved = new ArrayList<>();
-        for (PoljePopunjenoDTO poljePopunjenoDTO : formularPopunjenDTO.getPopunjenaPolja()) {
-            Optional<PoljePopunjenoDTO> poljePopunjenoSaved = poljePopunjenoService.createPoljePopunjeno(poljePopunjenoDTO, formularPopunjenMapper.toFormularPopunjenDTO(formularPopunjen));
-            poljePopunjenoSaved.ifPresent(poljaPopunjenaSaved::add);
+        for (PoljePopunjeno poljePopunjeno : formularPopunjen.getPopunjenaPolja()){
+            poljePopunjeno.setFormularPopunjen(formularPopunjen);
         }
 
-        return Optional.of(formularPopunjenMapper.toFormularPopunjenDTO(formularPopunjenSaved, poljaPopunjenaSaved));
+        FormularPopunjen formularPopunjenSaved = formularPopunjenRepository.save(formularPopunjen);
+
+        return Optional.of(formularPopunjenMapper.toFormularPopunjenDTO(formularPopunjenSaved));
     }
 
     public Optional<FormularPopunjenDTO> update(FormularPopunjenDTO formularPopunjenDTO) throws Exception {
@@ -95,10 +95,6 @@ public class FormularPopunjenService {
         Optional<FormularPopunjen> formularPopunjenOptional = formularPopunjenRepository.findById(formularPopunjenDTO.getId());
         if (formularPopunjenOptional.isEmpty()) {
             throw new Exception("Nije pronadjen formular za uneti ID");
-        }
-        List<PoljePopunjenoDTO> popunjenaPoljaZaBrisanje = poljePopunjenoService.getByFormularPopunjenId(formularPopunjenDTO.getId());
-        for (PoljePopunjenoDTO poljePopunjenoDTO : popunjenaPoljaZaBrisanje) {
-            poljePopunjenoService.deletePoljePopunjeno(poljePopunjenoDTO);
         }
         formularPopunjenRepository.deleteById(formularPopunjenDTO.getId());
         return true;

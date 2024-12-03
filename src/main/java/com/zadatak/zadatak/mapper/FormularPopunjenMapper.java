@@ -25,7 +25,12 @@ public interface FormularPopunjenMapper {
 
     FormularPopunjen toFormularPopunjen(FormularPopunjenDTO formularPopunjenDTO);
 
+    @Mapping(target = "formularPopunjenId", source = "poljePopunjeno.formularPopunjen.id")
+    @Mapping(target = "poljeId", source = "poljePopunjeno.polje.id")
+    PoljePopunjenoDTO poljeToPoljeDTO(PoljePopunjeno poljePopunjeno);
+
     @Mapping(target = "vremeKreiranja", ignore = true)
     @Mapping(target = "vremePoslednjeIzmene", ignore = true)
+    @Mapping(target = "popunjenaPolja", ignore = true)
     void updateFormularPopunjenFromDTO(FormularPopunjenDTO formularPopunjenDTO, @MappingTarget FormularPopunjen formularPopunjen);
 }
