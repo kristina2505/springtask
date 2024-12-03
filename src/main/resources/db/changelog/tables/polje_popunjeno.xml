@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1-create-polje-popunjeno" author="kristina">
+        <createTable tableName="polje_popunjeno">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="formular_popunjen_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="polje_id" type="INT"/>
+            <column name="vrednost_tekst" type="VARCHAR(256)"/>
+            <column name="vrednost_broj" type="DOUBLE"/>
+            <column name="vreme_kreiranja" type="DATETIME"/>
+            <column name="vreme_poslednje_izmene" type="DATETIME"/>
+            <column name="id_korisnik_kreirao" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_korisnik_poslednji_azurirao" type="INT"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="formular_popunjen_id" baseTableName="polje_popunjeno"
+                                 constraintName="fk_polje_popunjeno_formular_popunjen"
+                                 referencedColumnNames="id" referencedTableName="formular_popunjen"/>
+        <addForeignKeyConstraint baseColumnNames="polje_id" baseTableName="polje_popunjeno"
+                                 constraintName="fk_polje_popunjeno_polje"
+                                 referencedColumnNames="id" referencedTableName="polje"/>
+        <addForeignKeyConstraint baseColumnNames="id_korisnik_kreirao" baseTableName="polje_popunjeno"
+                                 constraintName="fk_polje_popunjeno_korisnik_kreirao"
+                                 referencedColumnNames="id" referencedTableName="korisnik"/>
+        <addForeignKeyConstraint baseColumnNames="id_korisnik_poslednji_azurirao" baseTableName="polje_popunjeno"
+                                 constraintName="fk_polje_popunjeno_korisnik_azurirao"
+                                 referencedColumnNames="id" referencedTableName="korisnik"/>
+    </changeSet>
+</databaseChangeLog>

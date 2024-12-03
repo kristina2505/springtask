@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1-create-korisnik" author="kristina">
+        <createTable tableName="korisnik">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="korisnicko_ime" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="lozinka" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="ENUM('ADMIN', 'RADNIK')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vreme_kreiranja" type="DATETIME"/>
+            <column name="vreme_poslednje_izmene" type="DATETIME"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

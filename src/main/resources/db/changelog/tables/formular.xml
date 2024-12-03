@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1-create-formular" author="kristina">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="formular"/>
+            </not>
+        </preConditions>
+        <createTable tableName="formular">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="naziv" type="VARCHAR(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vreme_kreiranja" type="DATETIME"/>
+            <column name="vreme_poslednje_izmene" type="DATETIME"/>
+            <column name="id_korisnik_kreirao" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_korisnik_poslednji_azurirao" type="INT"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="id_korisnik_kreirao" baseTableName="formular"
+                                 constraintName="fk_formular_korisnik_kreirao"
+                                 referencedColumnNames="id" referencedTableName="korisnik"/>
+        <addForeignKeyConstraint baseColumnNames="id_korisnik_poslednji_azurirao" baseTableName="formular"
+                                 constraintName="fk_formular_korisnik_azurirao"
+                                 referencedColumnNames="id" referencedTableName="korisnik"/>
+    </changeSet>
+</databaseChangeLog>

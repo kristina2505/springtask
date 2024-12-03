@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1-insert-korisnici" author="kristina">
+        <insert tableName="korisnik">
+            <column name="korisnicko_ime" value="kristina"/>
+            <column name="lozinka" value="$2a$12$wstdQi557K7/3bxPAfD0O.lMj66b1dNPIyS6n7LfWsSRjHdkRXvhG"/>
+            <column name="role" value="ADMIN"/>
+            <column name="vreme_kreiranja" valueDate="NOW()"/>
+            <column name="vreme_poslednje_izmene" valueDate="NOW()"/>
+        </insert>
+        <insert tableName="korisnik">
+            <column name="korisnicko_ime" value="aleksandar"/>
+            <column name="lozinka" value="$2a$12$fcPAqU1BtjEDE5WYC5Lyqux.Wviu6aNaYWSdHc/VylrO37IAthyJy"/>
+            <column name="role" value="RADNIK"/>
+            <column name="vreme_kreiranja" valueDate="NOW()"/>
+            <column name="vreme_poslednje_izmene" valueDate="NOW()"/>
+        </insert>
+        <insert tableName="korisnik">
+            <column name="korisnicko_ime" value="uros"/>
+            <column name="lozinka" value="$2a$12$KIXCZYHO4BbQw29thuaxB.jWcVgTtiCcSAkwBvxtZr0tx3v0d13hm"/>
+            <column name="role" value="RADNIK"/>
+            <column name="vreme_kreiranja" valueDate="NOW()"/>
+            <column name="vreme_poslednje_izmene" valueDate="NOW()"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

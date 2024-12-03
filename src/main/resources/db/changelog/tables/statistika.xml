@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1-create-statistika" author="kristina">
+        <createTable tableName="statistika">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="formular_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="broj_popunjavanja" type="INT"/>
+            <column name="vreme_poslednje_izmene" type="DATETIME"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="formular_id" baseTableName="statistika"
+                                 constraintName="fk_statistika_formular"
+                                 referencedColumnNames="id" referencedTableName="formular"/>
+    </changeSet>
+</databaseChangeLog>
