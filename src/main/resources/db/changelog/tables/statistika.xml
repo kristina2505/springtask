@@ -13,7 +13,7 @@
             <column name="formular_id" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="broj_popunjavanja" type="INT"/>
+            <column name="broj_popunjenih_formulara" type="INT"/>
             <column name="vreme_poslednje_izmene" type="DATETIME"/>
         </createTable>
         <addForeignKeyConstraint baseColumnNames="formular_id" baseTableName="statistika"

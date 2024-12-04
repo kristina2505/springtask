@@ -26,7 +26,7 @@ public class Formular {
     private LocalDateTime vremeKreiranja;
     private LocalDateTime vremePoslednjeIzmene;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "formular", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Polje> polja;
 
     @ManyToOne(fetch = FetchType.LAZY)
