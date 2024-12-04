@@ -2,9 +2,12 @@ package com.zadatak.zadatak.service;
 
 import com.zadatak.zadatak.dto.FormularDTO;
 import com.zadatak.zadatak.dto.FormularPopunjenDTO;
+import com.zadatak.zadatak.dto.PoljeDTO;
 import com.zadatak.zadatak.dto.PoljePopunjenoDTO;
 import com.zadatak.zadatak.mapper.FormularMapper;
 import com.zadatak.zadatak.mapper.FormularPopunjenMapper;
+import com.zadatak.zadatak.mapper.PoljeMapper;
+import com.zadatak.zadatak.mapper.PoljePopunjenoMapper;
 import com.zadatak.zadatak.model.Formular;
 import com.zadatak.zadatak.model.FormularPopunjen;
 import com.zadatak.zadatak.model.PoljePopunjeno;
@@ -28,6 +31,9 @@ public class FormularPopunjenService {
     private final PoljePopunjenoService poljePopunjenoService;
     private final FormularPopunjenMapper formularPopunjenMapper;
     private final FormularMapper formularMapper;
+    private final PoljeService poljeService;
+    private final PoljeMapper poljeMapper;
+    private final PoljePopunjenoMapper poljePopunjenoMapper;
 
     public List<FormularPopunjenDTO> getAll() {
         List<FormularPopunjen> popunjeniFormulari = formularPopunjenRepository.findAll();
@@ -63,10 +69,18 @@ public class FormularPopunjenService {
         Formular formular = formularMapper.toFormular(formularDTO.get());
         FormularPopunjen formularPopunjen = formularPopunjenMapper.toFormularPopunjen(formularPopunjenDTO);
         formularPopunjen.setFormular(formular);
-        for (PoljePopunjeno poljePopunjeno : formularPopunjen.getPopunjenaPolja()){
+        List<PoljePopunjeno> popunjenaPolja = new ArrayList<>();
+        for (PoljePopunjenoDTO poljePopunjenoDTO:formularPopunjenDTO.getPopunjenaPolja()){
+            PoljePopunjeno poljePopunjeno = poljePopunjenoMapper.toPoljePopunjeno(poljePopunjenoDTO);
             poljePopunjeno.setFormularPopunjen(formularPopunjen);
+            Optional<PoljeDTO> poljeDTOOptional = poljeService.getById(poljePopunjenoDTO.getPoljeId());
+            if (poljeDTOOptional.isEmpty()) {
+                throw new Exception("Nije pronadjeno polje za zadati ID");
+            }
+            poljePopunjeno.setPolje(poljeMapper.toPolje(poljeDTOOptional.get()));
+            popunjenaPolja.add(poljePopunjeno);
         }
-
+        formularPopunjen.setPopunjenaPolja(popunjenaPolja);
         FormularPopunjen formularPopunjenSaved = formularPopunjenRepository.save(formularPopunjen);
 
         return Optional.of(formularPopunjenMapper.toFormularPopunjenDTO(formularPopunjenSaved));

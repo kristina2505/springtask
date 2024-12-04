@@ -13,7 +13,9 @@
             <column name="formular_popunjen_id" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="polje_id" type="INT"/>
+            <column name="polje_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
             <column name="vrednost_tekst" type="VARCHAR(256)"/>
             <column name="vrednost_broj" type="DOUBLE"/>
             <column name="vreme_kreiranja" type="DATETIME"/>
